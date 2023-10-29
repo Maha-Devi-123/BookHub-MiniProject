@@ -1,0 +1,142 @@
+.main-con {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@media screen and (max-width: 756px) {
+  .main-con {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.image-con {
+  height: 100%;
+  width: 50%;
+  background-image: url('https://i.ibb.co/rwftdkR/Rectangle-1467.png');
+  background-size: cover;
+}
+.login-con {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  background: #f8fafc;
+}
+
+@media screen and (max-width: 756px) {
+  .image-con {
+    max-width: 100%;
+    max-height: 50%;
+    width: 216px;
+    height: 216px;
+    border-radius: 216px;
+  }
+  .login-con {
+    max-width: 100%;
+    max-height: 50%;
+
+    background-color: #fff;
+  }
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.logo-con {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+  align-self: center;
+}
+
+.logo-text {
+  color: #0284c7;
+  text-align: center;
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-family: Almendra SC;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 100% */
+}
+
+.login-btn {
+  background-color: #0284c7;
+  color: white;
+  width: 100%;
+  border: none;
+  height: 33px;
+  border-radius: 5px;
+  color: #fff;
+  text-align: center;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.username-password {
+  color: #5a7184;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.input-bar {
+  width: 100%;
+  border: 1px solid #c3cad9;
+  height: 33px;
+  border-radius: 5px;
+  margin-bottom: 25px;
+  margin-top: 7px;
+  color: #183b56;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding-left: 10px;
+  outline: none;
+}
+@media screen and (max-width: 756px) {
+  .login-form {
+    padding: 15px;
+    width: 250px;
+    max-height: 45%;
+    padding-top: 15px;
+    padding-bottom: 20px;
+  }
+  .logo-text {
+    font-size: 20px;
+    line-height: 20px; /* 100% */
+  }
+  .login-btn {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+  .input-bar {
+    height: 30px;
+  }
+  .b-icon {
+    width: 50px;
+  }
+}
