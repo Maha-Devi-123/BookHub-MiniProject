@@ -1,0 +1,148 @@
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+.active {
+  color: #0284c7;
+  font-weight: 600;
+}
+
+nav {
+  padding-left: 35px;
+  padding-right: 35px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  margin-bottom: 30px;
+}
+nav .nav-logo-con {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+nav div p {
+  align-self: flex-end;
+  color: #0284c7;
+  text-align: center;
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-family: Almendra SC;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
+nav div img {
+  height: 50px;
+  width: 60px;
+  align-self: flex-start;
+}
+nav ul {
+  display: flex;
+}
+nav ul li {
+  list-style: none;
+  margin-right: 35px;
+  cursor: pointer;
+}
+nav ul li a {
+  color: var(--light-blue-gray-500, #64748b);
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px;
+  letter-spacing: -0.356px;
+  text-decoration: none;
+}
+nav ul li button {
+  color: var(--light-blue-gray-50, #f8fafc);
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  display: flex;
+  padding: 8px 16px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  background: #0284c7;
+  border: none;
+  cursor: pointer;
+}
+nav .hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  width: 1.75rem;
+  height: 1.3rem;
+  border: none;
+  cursor: pointer;
+}
+nav .hamburger span {
+  height: 0.2rem;
+  width: 100%;
+  border-radius: 0.2rem;
+  background-color: #475569;
+}
+.cancle-icon {
+  display: none;
+}
+
+@media (max-width: 755px) {
+  .cancle-icon {
+    display: block;
+  }
+  nav .hamburger {
+    display: flex;
+    background-color: white;
+  }
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    margin-bottom: 0px;
+  }
+  nav div p {
+    font-size: 16px;
+  }
+  nav div img {
+    height: 30px;
+    width: 40px;
+    align-self: flex-start;
+  }
+  nav ul {
+    display: none;
+    justify-content: space-around;
+    align-items: center;
+    background: #f5f7fa;
+    width: 100%;
+    padding-bottom: 15px;
+    padding-top: 15px;
+  }
+  nav ul.open {
+    display: flex;
+  }
+  nav ul li {
+    margin: 0px;
+  }
+  nav ul li a {
+    font-size: 12px;
+  }
+  nav ul li button {
+    font-size: 10px;
+    padding: 5px 12px;
+  }
+}

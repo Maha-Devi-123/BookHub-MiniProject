@@ -49,7 +49,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: start;
+  align-items: flex-start;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -73,7 +73,7 @@
   font-size: 24px;
   font-style: normal;
   font-weight: 400;
-  line-height: 24px; /* 100% */
+  line-height: 24px;
 }
 
 .login-btn {
@@ -90,6 +90,7 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  margin-top: 15px;
 }
 
 .username-password {
@@ -105,7 +106,6 @@
   border: 1px solid #c3cad9;
   height: 33px;
   border-radius: 5px;
-  margin-bottom: 25px;
   margin-top: 7px;
   color: #183b56;
   font-family: Inter;
@@ -139,4 +139,18 @@
   .b-icon {
     width: 50px;
   }
+}
+
+.error-msg {
+  font-family: Inter;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #ef4444;
+  margin-top: 0px;
+}
+.label-iput-con {
+  margin-top: 20px;
 }
