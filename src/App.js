@@ -2,16 +2,19 @@ import {Route, Switch} from 'react-router-dom'
 import './App.css'
 import Login from './components/Login'
 import Bookshelves from './components/Bookshelves'
-import Navbar from './components/Navbar'
 import Home from './components/Home'
+import ProtectedRoute from './components/ProtectedRoute'
+import PageNotFound from './components/PageNotFound'
+import BookDetails from './components/BookDetails'
 
 const App = () => (
   <div className="app">
-    <Navbar />
     <Switch>
       <Route exact path="/login" component={Login} />
-      <Route exact path="/" component={Home} />
-      <Route exact path="/bookshelves" component={Bookshelves} />
+      <ProtectedRoute exact path="/" component={Home} />
+      <ProtectedRoute exact path="/shelf" component={Bookshelves} />
+      <ProtectedRoute exact path="/books/:id" component={BookDetails} />
+      <Route component={PageNotFound} />
     </Switch>
   </div>
 )

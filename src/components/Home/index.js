@@ -1,80 +1,100 @@
-import {
-  AiOutlineGoogle,
-  AiOutlineTwitter,
-  AiOutlineYoutube,
-  AiOutlineLinkedin,
-  AiOutlineInstagram,
-} from 'react-icons/ai'
-
+import {Link} from 'react-router-dom'
+import Cookies from 'js-cookie'
+import {useState, useEffect} from 'react'
+import Loader from 'react-loader-spinner'
+import {Carousel} from 'react-responsive-carousel'
+import {Paper, Button} from '@mui/material'
+import Footer from '../Footer'
+import Navbar from '../Navbar'
 import './index.css'
 
-const topRatedBooks = [
-  {
-    imgUrl: 'https://i.ibb.co/XZChW6f/Rectangle-1433.png',
-    title: 'The Secret',
-    author: 'Rhonda Byrne',
-  },
-  {
-    imgUrl: 'https://i.ibb.co/cgyv1Tb/Rectangle-1433-1.png',
-    title: 'Fall To Earth',
-    author: 'ken Britz',
-  },
-]
+function Home() {
+  const [loader, setLoader] = useState(true)
+  const [topRatedBooks, setTRB] = useState([])
 
-const PcThirdImage = () => (
-  <li className="image-item hide-pic">
-    <img
-      className="top-rated-img"
-      src="https://i.ibb.co/qBc8b6C/Rectangle-1433-2.png"
-      alt="Borrowed Magic"
-    />
-    <h1 className="book-title">Borrowed Magic</h1>
-    <p className="author-name">Stephanie Foxe</p>
-  </li>
-)
+  useEffect(() => {
+    const url = 'https://apis.ccbp.in/book-hub/top-rated-books'
+    const jwtToken = Cookies.get('jwt_token')
+    const headers = {
+      Authorization: `Bearer ${jwtToken}`,
+    }
+    const options = {
+      method: 'GET',
+      headers,
+    }
+    async function fetchData() {
+      try {
+        const response = await fetch(url, options)
 
-const Home = () => (
-  <div className="Home-main-con">
-    <div className="head-dis-con">
-      <h1 className="find-fav-books-head">Find Your Next Favorite Books?</h1>
-      <p className="fav-books-dis">
-        You are in the right place.Tell us what titles or genres you have
-        enjoyed in the past, and we will give you surprisingly insightful
-        recommendations.
-      </p>
-      <button className="find-books-btn mb-btn" type="button">
-        Find Books
-      </button>
-    </div>
-    <div className="top-rated-books-con">
-      <div className="head-btn-con">
-        <h1 className="top-rated-books-head">Top Rated Books</h1>
-        <button className="find-books-btn pc-btn" type="button">
-          Find Books
-        </button>
+        if (response.ok) {
+          const data = await response.json()
+          const booksList = data.books
+          const booksData = booksList.map(each => ({
+            authorName: each.author_name,
+            coverPic: each.cover_pic,
+            id: each.id,
+            title: each.title,
+          }))
+          const topRatedBooksData = []
+          let start = 0
+          let end = 3
+          while (end <= booksData.length) {
+            topRatedBooksData.push(booksData.slice(start, end))
+            start += 3
+            end += 3
+          }
+          setTRB(topRatedBooksData)
+          setLoader(false)
+        } else {
+          console.error('Failed to fetch data')
+        }
+      } catch (error) {
+        setLoader(false)
+        console.error('An error occurred while fetching data', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return (
+    <>
+      <Navbar />
+      <div className="Home-main-con">
+        <div className="head-dis-con">
+          <h1 className="find-fav-books-head">
+            Find Your Next Favorite Books?
+          </h1>
+          <p className="fav-books-dis">
+            You are in the right place.Tell us what titles or genres you have
+            enjoyed in the past, and we will give you surprisingly insightful
+            recommendations.
+          </p>
+          <Link to="/shelf">
+            <button className="find-books-btn mb-btn" type="button">
+              Find Books
+            </button>
+          </Link>
+        </div>
+        <div className="top-rated-books-con">
+          <div className="head-btn-con">
+            <h1 className="top-rated-books-head">Top Rated Books</h1>
+            <Link to="shelf">
+              <button className="find-books-btn pc-btn" type="button">
+                Find Books
+              </button>
+            </Link>
+          </div>
+          {loader && (
+            <div className="loader-container" testid="loader">
+              <Loader type="TailSpin" color="#0284C7" height={50} width={50} />
+            </div>
+          )}
+        </div>
       </div>
-      <ul className="ul-con">
-        {topRatedBooks.map(each => (
-          <li className="image-item">
-            <img className="top-rated-img" src={each.imgUrl} alt={each.title} />
-            <h1 className="book-title">{each.title}</h1>
-            <p className="author-name">{each.author}</p>
-          </li>
-        ))}
-        {PcThirdImage()}
-      </ul>
-    </div>
-    <div className="footer">
-      <div className="icons-con">
-        <AiOutlineGoogle className="icon" />
-        <AiOutlineTwitter className="icon" />
-        <AiOutlineYoutube className="icon" />
-        <AiOutlineLinkedin className="icon" />
-        <AiOutlineInstagram className="icon" />
-      </div>
-      <p className="contacts-us">Contact us</p>
-    </div>
-  </div>
-)
+      <Footer />
+    </>
+  )
+}
 
 export default Home

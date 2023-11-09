@@ -1,6 +1,11 @@
-import {Component} from 'react'
 import {FaSearch} from 'react-icons/fa'
+import {useState, useEffect} from 'react'
+import Loader from 'react-loader-spinner'
+import Cookies from 'js-cookie'
+import Navbar from '../Navbar'
 import BookItem from '../BookItem'
+import SearchNotFound from '../SearchNotFound'
+import Footer from '../Footer'
 
 import './index.css'
 
@@ -27,49 +32,157 @@ const bookshelvesList = [
   },
 ]
 
-class Bookshelves extends Component {
-  componentDidMount() {
-    this.displayBooks()
+function Bookshelves() {
+  const [category, setCategory] = useState('ALL')
+  const [searchText, setSearchText] = useState('')
+  const [currentBooksList, setBooksList] = useState([])
+  const [load, setLoad] = useState(true)
+  const [cat, setCat] = useState('All')
+
+  function handleChanges(event) {
+    setSearchText(event.target.value)
   }
 
-  displayBooks = () => {}
+  function doSearch() {
+    const filteredBooks = currentBooksList.filter(each =>
+      each.title.toLowerCase().includes(searchText.toLowerCase()),
+    )
 
-  render() {
-    return (
+    setBooksList(filteredBooks)
+  }
+
+  useEffect(() => {
+    const url = `https://apis.ccbp.in/book-hub/books?shelf=${category}`
+    const jwtToken = Cookies.get('jwt_token')
+    const headers = {
+      Authorization: `Bearer ${jwtToken}`,
+    }
+    const options = {
+      method: 'GET',
+      headers,
+    }
+    async function fetchData() {
+      try {
+        const response = await fetch(url, options)
+
+        if (response.ok) {
+          const data = await response.json()
+          const booksList = data.books
+          const booksData = booksList.map(each => ({
+            authorName: each.author_name,
+            coverPic: each.cover_pic,
+            id: each.id,
+            rating: each.rating,
+            readStatus: each.read_status,
+            title: each.title,
+          }))
+
+          setBooksList(booksData)
+          setLoad(false)
+        } else {
+          console.error('Failed to fetch data')
+        }
+      } catch (error) {
+        setLoad(false)
+        console.error('An error occurred while fetching data', error)
+      }
+    }
+
+    fetchData()
+  }, [category])
+
+  return (
+    <>
+      <Navbar />
       <div className="bookshelves-con">
         <div className="bookshelves-mini-con">
+          <div className="search-con hide">
+            <input
+              placeholder="Search"
+              className="search-bar"
+              type="search"
+              value={searchText}
+              onChange={handleChanges}
+            />
+            <button
+              type="button"
+              onClick={doSearch}
+              className="search-icon-con"
+            >
+              <FaSearch className="search-icon" />
+            </button>
+          </div>
           <div className="bookshelves-options">
-            <h1 className="bookshelves-head">Bookshelves</h1>
+            <h1 className="bookshelves-heading">Bookshelves</h1>
             <ul className="unorder-con">
               {bookshelvesList.map(each => (
-                <li className="cat-head" onClick={this.displayBooks}>
-                  {' '}
-                  {each.label}{' '}
+                <li
+                  onClick={() => {
+                    setCat(each.label)
+                    setCategory(each.value)
+                    setSearchText('')
+                    setLoad(true)
+                  }}
+                  key={each.id}
+                  className={
+                    each.value === category
+                      ? 'currently-active cat-head'
+                      : 'normal cat-head'
+                  }
+                >
+                  {each.label}
                 </li>
               ))}
             </ul>
           </div>
-
           <div className="search-books-items-con">
             <div className="head-search-con">
-              <h1 className="all-books-head">Books</h1>
+              <h1 className="all-books-head">{cat} Books</h1>
               <div className="search-con">
                 <input
                   placeholder="Search"
                   className="search-bar"
                   type="search"
+                  value={searchText}
+                  onChange={handleChanges}
                 />
-                <div className="search-icon-con">
+                <button
+                  type="button"
+                  onClick={doSearch}
+                  className="search-icon-con"
+                >
                   <FaSearch className="search-icon" />
-                </div>
+                </button>
               </div>
             </div>
-            <BookItem />
+            <div className="loader-search-res-con">
+              {load && (
+                <div className="loader-container" testid="loader">
+                  <Loader
+                    type="TailSpin"
+                    color="#0284C7"
+                    height={50}
+                    width={50}
+                  />
+                </div>
+              )}
+              {!load && (
+                <ul className="books-results-con">
+                  {currentBooksList.map(each => (
+                    <BookItem key={each.id} bookDetails={each} />
+                  ))}
+                </ul>
+              )}
+              {currentBooksList.length === 0 && !load && (
+                <SearchNotFound searchText={searchText} />
+              )}
+            </div>
           </div>
         </div>
       </div>
-    )
-  }
+      <Footer />
+    </>
+  )
 }
 
 export default Bookshelves

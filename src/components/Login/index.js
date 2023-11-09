@@ -1,5 +1,6 @@
 import {Component} from 'react'
-import {Cookies} from 'js-cookie'
+import Cookies from 'js-cookie'
+import {Redirect} from 'react-router-dom'
 import './index.css'
 
 const logo = () => (
@@ -20,13 +21,19 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      errorMsg: false,
+      showSubmitError: false,
+      errorMsg: '',
     }
   }
 
-  onSubmitSuccess = () => {
+  onSubmitSuccess = jwtToken => {
+    Cookies.set('jwt_token', jwtToken, {expires: 30})
     const {history} = this.props
     history.replace('/')
+  }
+
+  onSubmitFailure = errorMsg => {
+    this.setState({showSubmitError: true, errorMsg})
   }
 
   submitForm = async event => {
@@ -40,11 +47,12 @@ class Login extends Component {
     }
     const response = await fetch(url, options)
     const data = await response.json()
-    console.log(data)
+
     if (response.ok === true) {
-      this.onSubmitSuccess()
+      this.onSubmitSuccess(data.jwt_token)
+    } else {
+      this.onSubmitFailure(data.error_msg)
     }
-    this.setState({errorMsg: true})
   }
 
   getUserName = event => {
@@ -58,7 +66,12 @@ class Login extends Component {
   }
 
   render() {
-    const {errorMsg, username, password} = this.state
+    const jwtToken = Cookies.get('jwt_token')
+    if (jwtToken !== undefined) {
+      return <Redirect to="/" />
+    }
+
+    const {showSubmitError, errorMsg, username, password} = this.state
     return (
       <div className="main-con">
         <div className="image-con"> </div>
@@ -76,6 +89,7 @@ class Login extends Component {
                   id="username"
                   type="text"
                   value={username}
+                  placeholder="aakash"
                 />
               </div>
               <div className="label-iput-con">
@@ -88,11 +102,10 @@ class Login extends Component {
                   id="password"
                   type="password"
                   value={password}
+                  placeholder="sky@007"
                 />
               </div>
-              {errorMsg && (
-                <p className="error-msg">Username or Password is Invalid </p>
-              )}
+              {showSubmitError && <p className="error-msg">{errorMsg}</p>}
             </div>
             <button className="login-btn" type="submit">
               LogIn

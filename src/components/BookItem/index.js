@@ -1,24 +1,24 @@
-import {Component} from 'react'
+import {Link} from 'react-router-dom'
 import './index.css'
 
-class BookItem extends Component {
-  render() {
-    return (
-      <div className="image-item-con">
-        <img
-          src="https://i.ibb.co/cgyv1Tb/Rectangle-1433-1.png"
-          alt="img"
-          className="book-image-edit"
-        />
+const BookItem = props => {
+  const {bookDetails} = props
+  const {authorName, coverPic, id, rating, readStatus, title} = bookDetails
+  return (
+    <Link to={`books/${id}`}>
+      <li className="image-item-con">
+        <img src={coverPic} alt="img" className="book-image-edit" />
         <div className="book-details-con">
-          <h1 className="book-name-head">The Begging of Everything</h1>
-          <p className="book-author-name">Robyn Schneider</p>
-          <p className="book-author-name">rating</p>
-          <p className="book-author-name">status</p>
+          <h1 className="book-name-head">{title}</h1>
+          <p className="book-author-name">{authorName}</p>
+          <p className="book-rating">rating : {rating}</p>
+          <p className="book-rating">
+            status :<span style={{color: '#0284C7'}}> {readStatus} </span>
+          </p>
         </div>
-      </div>
-    )
-  }
+      </li>
+    </Link>
+  )
 }
 
 export default BookItem

@@ -1,11 +1,17 @@
 import {useState} from 'react'
-import {NavLink} from 'react-router-dom'
+import Cookies from 'js-cookie'
+import {NavLink, useHistory} from 'react-router-dom'
 import {BsFillXCircleFill} from 'react-icons/bs'
 import './index.css'
 
 function Navbar() {
   const [open, setOpen] = useState(false)
+  const history = useHistory()
 
+  const logoutUser = () => {
+    Cookies.remove('jwt_token')
+    history.replace('/login')
+  }
   return (
     <nav>
       <div className="nav-logo-con">
@@ -25,24 +31,24 @@ function Navbar() {
         <span> </span>
         <span> </span>
       </button>
-      <ul className={open ? 'open' : ''}>
-        <li>
+      <ul className={open ? 'open' : 'close'}>
+        <li key="Home">
           <NavLink exact to="/" activeClassName="active">
             Home
           </NavLink>
         </li>
-        <li>
-          <NavLink exact to="/bookshelves" activeClassName="active">
+        <li key="shelf">
+          <NavLink exact to="/shelf" activeClassName="active">
             Bookshelves
           </NavLink>
         </li>
-        <li>
-          <NavLink exact to="/logout" activeClassName="active">
-            {' '}
-            <button type="button">Logout</button>
-          </NavLink>
+        <li key="logout">
+          {' '}
+          <button onClick={logoutUser} type="button">
+            Logout
+          </button>
         </li>
-        <li className="cancle-icon">
+        <li key="cancel" className="cancle-icon">
           {' '}
           <BsFillXCircleFill onClick={() => setOpen(!open)} />
         </li>

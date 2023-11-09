@@ -1,0 +1,71 @@
+.page-not-found-con {
+  margin: 0px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-not-found-head {
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #334155;
+  margin-bottom: 15px;
+}
+
+.page-not-found-dis {
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #475569;
+}
+
+.go-back-btn {
+  font-family: Inter;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: center;
+  background-color: #0284c7;
+  padding: 8px 15px 8px 15px;
+  border-radius: 8px;
+  color: #ffffff;
+  border: none;
+  margin-top: 15px;
+}
+
+@media screen and (max-width: 756px) {
+  .page-not-found-head {
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+    width: 130px;
+    height: 24px;
+    top: 326px;
+    left: 114px;
+  }
+  .page-not-found-dis {
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+    width: 312px;
+    height: 72px;
+    top: 362px;
+    left: 24px;
+  }
+}
