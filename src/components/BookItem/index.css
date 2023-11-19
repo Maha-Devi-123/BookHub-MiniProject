@@ -56,6 +56,12 @@
   text-align: left;
   margin-bottom: 5px;
 }
+.flex-can {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 
 @media screen and (max-width: 576px) {
   .image-item-con {
@@ -71,6 +77,12 @@
   .book-details-con {
     width: 50%;
   }
+}
+.star-edit {
+  font-size: 15px;
+  color: #fbbf24;
+  margin-left: 6px;
+  margin-right: 4px;
 }
 
 @media screen and (max-width: 756px) {

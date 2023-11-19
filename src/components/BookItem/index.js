@@ -1,4 +1,5 @@
 import {Link} from 'react-router-dom'
+import {BsFillStarFill} from 'react-icons/bs'
 import './index.css'
 
 const BookItem = props => {
@@ -11,7 +12,13 @@ const BookItem = props => {
         <div className="book-details-con">
           <h1 className="book-name-head">{title}</h1>
           <p className="book-author-name">{authorName}</p>
-          <p className="book-rating">rating : {rating}</p>
+          <p className="book-rating flex-can">
+            Rating:{'  '}
+            <>
+              <BsFillStarFill className="star-edit" />
+              {rating}{' '}
+            </>
+          </p>
           <p className="book-rating">
             status :<span style={{color: '#0284C7'}}> {readStatus} </span>
           </p>

@@ -2,10 +2,10 @@ import {Link} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import {useState, useEffect} from 'react'
 import Loader from 'react-loader-spinner'
-import {Carousel} from 'react-responsive-carousel'
-import {Paper, Button} from '@mui/material'
 import Footer from '../Footer'
+import ReactSlick from '../Carousel'
 import Navbar from '../Navbar'
+
 import './index.css'
 
 function Home() {
@@ -35,17 +35,10 @@ function Home() {
             id: each.id,
             title: each.title,
           }))
-          const topRatedBooksData = []
-          let start = 0
-          let end = 3
-          while (end <= booksData.length) {
-            topRatedBooksData.push(booksData.slice(start, end))
-            start += 3
-            end += 3
-          }
-          setTRB(topRatedBooksData)
+          setTRB(booksData)
           setLoader(false)
         } else {
+          setLoader(false)
           console.error('Failed to fetch data')
         }
       } catch (error) {
@@ -77,18 +70,24 @@ function Home() {
           </Link>
         </div>
         <div className="top-rated-books-con">
-          <div className="head-btn-con">
-            <h1 className="top-rated-books-head">Top Rated Books</h1>
-            <Link to="shelf">
-              <button className="find-books-btn pc-btn" type="button">
-                Find Books
-              </button>
-            </Link>
+          <div className="flex-con">
+            <div className="head-btn-con">
+              <h1 className="top-rated-books-head">Top Rated Books</h1>
+              <Link to="shelf">
+                <button className="find-books-btn pc-btn" type="button">
+                  Find Books
+                </button>
+              </Link>
+            </div>
           </div>
           {loader && (
             <div className="loader-container" testid="loader">
               <Loader type="TailSpin" color="#0284C7" height={50} width={50} />
             </div>
+          )}
+
+          {!loader && topRatedBooks.length !== 0 && (
+            <ReactSlick topRatedBooks={topRatedBooks} />
           )}
         </div>
       </div>

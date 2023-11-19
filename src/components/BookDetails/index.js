@@ -1,5 +1,6 @@
 import {useParams} from 'react-router-dom'
 import {useState, useEffect} from 'react'
+import {BsFillStarFill} from 'react-icons/bs'
 import Cookies from 'js-cookie'
 import Footer from '../Footer'
 import Navbar from '../Navbar'
@@ -70,7 +71,13 @@ function BookDetails() {
                 <div>
                   <h1 className="bookDetail-title">{bookDetails.title} </h1>
                   <p className="bookDetails">{bookDetails.authorName}</p>
-                  <p className="bookDetails">Rating: {bookDetails.rating}</p>
+                  <p className="bookDetails">
+                    Rating:{'  '}
+                    <>
+                      <BsFillStarFill className="star" />
+                      {bookDetails.rating}{' '}
+                    </>
+                  </p>
                   <p className="bookDetails">
                     Status:
                     <span style={{color: '#0284C7'}}>
@@ -83,14 +90,11 @@ function BookDetails() {
               <hr className="hr-line" />
               <div>
                 <div className="about-author-con">
-                  <h1 className="about-author-head">{bookDetails.title} </h1>
+                  <h1 className="about-author-head">About Book</h1>
                   <p className="about-author-dis">{bookDetails.aboutBook} </p>
                 </div>
                 <div className="about-author-con">
-                  <h1 className="about-author-head">
-                    {' '}
-                    {bookDetails.authorName}
-                  </h1>
+                  <h1 className="about-author-head">About Author</h1>
                   <p className="about-author-dis">{bookDetails.aboutAuthor} </p>
                 </div>
               </div>

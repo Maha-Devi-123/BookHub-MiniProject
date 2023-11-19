@@ -38,6 +38,7 @@ function Bookshelves() {
   const [currentBooksList, setBooksList] = useState([])
   const [load, setLoad] = useState(true)
   const [cat, setCat] = useState('All')
+  const [networkErr, setNetworkErr] = useState(false)
 
   function handleChanges(event) {
     setSearchText(event.target.value)
@@ -49,6 +50,24 @@ function Bookshelves() {
     )
 
     setBooksList(filteredBooks)
+  }
+
+  async function fetchWithTimeout(url, options, timeout) {
+    const controller = new AbortController()
+    const {signal} = controller.signal
+
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => {
+        controller.abort()
+        reject(new Error('Request timeout'))
+      }, timeout),
+    )
+
+    const response = await Promise.race([
+      fetch(url, {...options, signal}),
+      timeoutPromise,
+    ])
+    return response
   }
 
   useEffect(() => {
@@ -63,8 +82,7 @@ function Bookshelves() {
     }
     async function fetchData() {
       try {
-        const response = await fetch(url, options)
-
+        const response = await fetchWithTimeout(url, options, 10000)
         if (response.ok) {
           const data = await response.json()
           const booksList = data.books
@@ -84,12 +102,16 @@ function Bookshelves() {
         }
       } catch (error) {
         setLoad(false)
-        console.error('An error occurred while fetching data', error)
+        setNetworkErr(true)
+        console.log(error)
       }
     }
 
     fetchData()
-  }, [category])
+    if (searchText === '') {
+      fetchData()
+    }
+  }, [category, searchText])
 
   return (
     <>
@@ -173,8 +195,17 @@ function Bookshelves() {
                   ))}
                 </ul>
               )}
-              {currentBooksList.length === 0 && !load && (
+              {currentBooksList.length === 0 && !load && !networkErr && (
                 <SearchNotFound searchText={searchText} />
+              )}
+
+              {networkErr && (
+                <div>
+                  <h1> Something went wrong, Please try again.</h1>
+                  <button onClick={() => setCategory(category)} type="button">
+                    Try Again
+                  </button>
+                </div>
               )}
             </div>
           </div>
