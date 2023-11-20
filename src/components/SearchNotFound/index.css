@@ -1,3 +1,10 @@
+.search-not-found-con {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .search-not-found-text {
   font-family: Inter;
   font-size: 24px;

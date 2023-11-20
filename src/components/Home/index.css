@@ -1,5 +1,13 @@
 a {
+  cursor: pointer;
   text-decoration: none;
+}
+button {
+  cursor: pointer;
+}
+
+.net-err-container {
+  padding: 10px;
 }
 .Home-main-con {
   background: #f5f7fa;
@@ -200,7 +208,6 @@ a {
   width: 100%;
   display: flex;
   flex-direction: row;
-  background-color: aqua;
   margin: 5px;
 }
 .cur-con {
@@ -223,6 +230,7 @@ a {
   }
   .top-rated-books-con {
     width: 100%;
+    padding: 20px;
     margin: 0px;
   }
 

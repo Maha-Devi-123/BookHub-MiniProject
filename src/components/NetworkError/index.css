@@ -1,0 +1,50 @@
+.net-err-con {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.something-text {
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-bottom: 15px;
+  color: #475569;
+  margin-top: 15px;
+}
+.try-again-btn {
+  background-color: #0284c7;
+  color: white;
+  border: none;
+  outline: none;
+  padding: 5px 15px 5px 15px;
+  font-family: Inter;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+@media screen and (max-width: 756px) {
+  .net-img-err {
+    width: 150px;
+    margin-top: 10px;
+  }
+  .net-err-con {
+    min-height: 150px;
+    margin: 0px;
+  }
+  .something-text {
+    font-size: 12px;
+  }
+  .try-again-btn {
+    padding: 4px 10px 4px 10px;
+    font-size: 10px;
+  }
+}

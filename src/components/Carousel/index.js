@@ -21,20 +21,37 @@ function ReactSlick(topRatedBooks) {
     }
   }, [])
 
-  const slides = width > 756 ? 3 : 2
+  let slides
+  switch (true) {
+    case width < 556:
+      slides = 1
+      break
+    case width < 756:
+      slides = 2
+      break
+    default:
+      slides = 3
+      break
+  }
+
+  console.log(width)
+  console.log(slides)
 
   const settings = {
     dots: true,
     slidesToShow: slides,
     slidesToScroll: 1,
+    autoplay: true, // Make sure this is set to true
+    autoplaySpeed: 2000, // Adjust the speed as needed
   }
+
   const trb = topRatedBooks
   return (
     <div className="slider-container">
       <Slider {...settings}>
         {trb.topRatedBooks.map(each => (
-          <Link to={`books/${each.id}`}>
-            <div className="trb-item-con" key={each.id}>
+          <Link key={each.id} to={`books/${each.id}`}>
+            <div className="trb-item-con">
               <img src={each.coverPic} alt={each.title} className="trb-img" />
               <h2 className="trb-book-title">{each.title}</h2>
               <h3 className="trb-book-author">{each.authorName}</h3>

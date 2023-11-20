@@ -7,6 +7,11 @@
   align-items: center;
 }
 
+.not-found-img {
+  width: 200px;
+  margin-bottom: 15px;
+}
+
 .page-not-found-head {
   font-family: Roboto;
   font-size: 18px;
@@ -26,6 +31,7 @@
   letter-spacing: 0em;
   text-align: center;
   color: #475569;
+  width: 400px;
 }
 
 .go-back-btn {
@@ -44,6 +50,10 @@
 }
 
 @media screen and (max-width: 756px) {
+  .not-found-img {
+    width: 150px;
+    margin-bottom: 15px;
+  }
   .page-not-found-head {
     font-family: Roboto;
     font-size: 18px;

@@ -4,6 +4,11 @@ import './index.css'
 function PageNotFound() {
   return (
     <div className="page-not-found-con">
+      <img
+        src="https://i.ibb.co/z834VMh/Group-7484.jpg"
+        className="not-found-img"
+        alt="page not found"
+      />
       <h1 className="page-not-found-head">Page Not Found</h1>
       <p className="page-not-found-dis">
         we are sorry, the page you requested could not be found. Please go back

@@ -5,12 +5,33 @@ import Loader from 'react-loader-spinner'
 import Footer from '../Footer'
 import ReactSlick from '../Carousel'
 import Navbar from '../Navbar'
+import NetworkError from '../NetworkError'
 
 import './index.css'
 
 function Home() {
   const [loader, setLoader] = useState(true)
   const [topRatedBooks, setTRB] = useState([])
+  const [retry, setRetry] = useState(false)
+  const [error, setError] = useState(false)
+
+  async function fetchWithTimeout(url, options, timeout) {
+    const controller = new AbortController()
+    const {signal} = controller.signal
+
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => {
+        controller.abort()
+        reject(new Error('Request timeout'))
+      }, timeout),
+    )
+
+    const response = await Promise.race([
+      fetch(url, {...options, signal}),
+      timeoutPromise,
+    ])
+    return response
+  }
 
   useEffect(() => {
     const url = 'https://apis.ccbp.in/book-hub/top-rated-books'
@@ -24,7 +45,7 @@ function Home() {
     }
     async function fetchData() {
       try {
-        const response = await fetch(url, options)
+        const response = await fetchWithTimeout(url, options, 10000)
 
         if (response.ok) {
           const data = await response.json()
@@ -37,18 +58,21 @@ function Home() {
           }))
           setTRB(booksData)
           setLoader(false)
-        } else {
-          setLoader(false)
-          console.error('Failed to fetch data')
+          setRetry(false)
+          setError(false)
         }
-      } catch (error) {
+      } catch (err) {
+        setRetry(false)
         setLoader(false)
-        console.error('An error occurred while fetching data', error)
+        setError(true)
+        console.error('An error occurred while fetching data', err)
       }
     }
-
     fetchData()
-  }, [])
+    if (retry) {
+      fetchData()
+    }
+  }, [retry])
 
   return (
     <>
@@ -80,9 +104,21 @@ function Home() {
               </Link>
             </div>
           </div>
-          {loader && (
+          {loader && !error && (
             <div className="loader-container" testid="loader">
               <Loader type="TailSpin" color="#0284C7" height={50} width={50} />
+            </div>
+          )}
+
+          {error && (
+            <div className="net-err-container">
+              <NetworkError
+                onClickFun={() => {
+                  setRetry(true)
+                  setLoader(true)
+                  setError(false)
+                }}
+              />
             </div>
           )}
 

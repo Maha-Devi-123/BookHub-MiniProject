@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 import Navbar from '../Navbar'
 import BookItem from '../BookItem'
 import SearchNotFound from '../SearchNotFound'
+import NetworkError from '../NetworkError'
 import Footer from '../Footer'
 
 import './index.css'
@@ -39,6 +40,7 @@ function Bookshelves() {
   const [load, setLoad] = useState(true)
   const [cat, setCat] = useState('All')
   const [networkErr, setNetworkErr] = useState(false)
+  const [retry, setRetry] = useState(false)
 
   function handleChanges(event) {
     setSearchText(event.target.value)
@@ -54,7 +56,7 @@ function Bookshelves() {
 
   async function fetchWithTimeout(url, options, timeout) {
     const controller = new AbortController()
-    const {signal} = controller.signal
+    const {signal} = controller
 
     const timeoutPromise = new Promise((_, reject) =>
       setTimeout(() => {
@@ -63,11 +65,17 @@ function Bookshelves() {
       }, timeout),
     )
 
-    const response = await Promise.race([
-      fetch(url, {...options, signal}),
-      timeoutPromise,
-    ])
-    return response
+    try {
+      const response = await Promise.race([
+        fetch(url, {...options, signal}),
+        timeoutPromise,
+      ])
+
+      return response
+    } catch (error) {
+      console.error(error.message)
+      throw error
+    }
   }
 
   useEffect(() => {
@@ -82,7 +90,7 @@ function Bookshelves() {
     }
     async function fetchData() {
       try {
-        const response = await fetchWithTimeout(url, options, 10000)
+        const response = await fetchWithTimeout(url, options, 30000)
         if (response.ok) {
           const data = await response.json()
           const booksList = data.books
@@ -97,21 +105,21 @@ function Bookshelves() {
 
           setBooksList(booksData)
           setLoad(false)
-        } else {
-          console.error('Failed to fetch data')
+          setNetworkErr(false)
+          setRetry(false)
         }
       } catch (error) {
         setLoad(false)
         setNetworkErr(true)
-        console.log(error)
+        setRetry(false)
       }
     }
-
     fetchData()
-    if (searchText === '') {
+    if (retry || searchText === '') {
       fetchData()
+      setLoad(true)
     }
-  }, [category, searchText])
+  }, [category, searchText, retry])
 
   return (
     <>
@@ -188,24 +196,24 @@ function Bookshelves() {
                   />
                 </div>
               )}
-              {!load && (
+              {networkErr && (
+                <NetworkError
+                  onClickFun={() => {
+                    setRetry(true)
+                    setLoad(true)
+                    setNetworkErr(false)
+                  }}
+                />
+              )}
+              {!load && !networkErr && (
                 <ul className="books-results-con">
                   {currentBooksList.map(each => (
                     <BookItem key={each.id} bookDetails={each} />
                   ))}
                 </ul>
               )}
-              {currentBooksList.length === 0 && !load && !networkErr && (
+              {currentBooksList.length === 0 && searchText !== '' && (
                 <SearchNotFound searchText={searchText} />
-              )}
-
-              {networkErr && (
-                <div>
-                  <h1> Something went wrong, Please try again.</h1>
-                  <button onClick={() => setCategory(category)} type="button">
-                    Try Again
-                  </button>
-                </div>
               )}
             </div>
           </div>
