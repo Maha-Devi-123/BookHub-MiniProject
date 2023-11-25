@@ -15,24 +15,6 @@ function Home() {
   const [retry, setRetry] = useState(false)
   const [error, setError] = useState(false)
 
-  async function fetchWithTimeout(url, options, timeout) {
-    const controller = new AbortController()
-    const {signal} = controller.signal
-
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => {
-        controller.abort()
-        reject(new Error('Request timeout'))
-      }, timeout),
-    )
-
-    const response = await Promise.race([
-      fetch(url, {...options, signal}),
-      timeoutPromise,
-    ])
-    return response
-  }
-
   useEffect(() => {
     const url = 'https://apis.ccbp.in/book-hub/top-rated-books'
     const jwtToken = Cookies.get('jwt_token')
@@ -45,7 +27,7 @@ function Home() {
     }
     async function fetchData() {
       try {
-        const response = await fetchWithTimeout(url, options, 10000)
+        const response = await fetch(url, options)
 
         if (response.ok) {
           const data = await response.json()
@@ -60,6 +42,10 @@ function Home() {
           setLoader(false)
           setRetry(false)
           setError(false)
+        } else {
+          setRetry(false)
+          setLoader(false)
+          setError(true)
         }
       } catch (err) {
         setRetry(false)

@@ -25,9 +25,12 @@
   justify-content: flex-start;
   align-items: flex-start;
   margin: 10px;
-  background-color: white;
   border-radius: 8px;
   padding-right: 8px;
+  background-color: white;
+}
+.image-item-con:hover {
+  background-color: azure;
 }
 .book-details-con {
   width: 173px;

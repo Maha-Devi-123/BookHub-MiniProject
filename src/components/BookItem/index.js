@@ -8,12 +8,12 @@ const BookItem = props => {
   return (
     <Link to={`books/${id}`}>
       <li className="image-item-con">
-        <img src={coverPic} alt="img" className="book-image-edit" />
+        <img src={coverPic} alt={title} className="book-image-edit" />
         <div className="book-details-con">
           <h1 className="book-name-head">{title}</h1>
           <p className="book-author-name">{authorName}</p>
           <p className="book-rating flex-can">
-            Rating:{'  '}
+            Avg Rating:{'  '}
             <>
               <BsFillStarFill className="star-edit" />
               {rating}{' '}

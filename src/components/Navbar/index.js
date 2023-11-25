@@ -14,14 +14,16 @@ function Navbar() {
   }
   return (
     <nav>
-      <div className="nav-logo-con">
-        <img
-          src="https://i.ibb.co/hmXZxZv/Group-7730.jpg"
-          alt="Group-7730"
-          border="0"
-        />
-        <p>ook Hub</p>
-      </div>
+      <NavLink exact to="/" activeClassName="active">
+        <div className="nav-logo-con hovering">
+          <img
+            src="https://i.ibb.co/hmXZxZv/Group-7730.jpg"
+            alt="website logo"
+            border="0"
+          />
+          <p>ook Hub</p>
+        </div>
+      </NavLink>
       <button
         onClick={() => setOpen(!open)}
         type="button"
@@ -32,12 +34,12 @@ function Navbar() {
         <span> </span>
       </button>
       <ul className={open ? 'open' : 'close'}>
-        <li key="Home">
+        <li key="Home" className="hovering">
           <NavLink exact to="/" activeClassName="active">
             Home
           </NavLink>
         </li>
-        <li key="shelf">
+        <li key="shelf" className="hovering">
           <NavLink exact to="/shelf" activeClassName="active">
             Bookshelves
           </NavLink>

@@ -1,8 +1,10 @@
 import {useParams} from 'react-router-dom'
 import {useState, useEffect} from 'react'
+import Loader from 'react-loader-spinner'
 import {BsFillStarFill} from 'react-icons/bs'
 import Cookies from 'js-cookie'
 import Footer from '../Footer'
+import NetworkError from '../NetworkError'
 import Navbar from '../Navbar'
 import './index.css'
 
@@ -12,6 +14,8 @@ function BookDetails() {
 
   const [load, setLoad] = useState(true)
   const [bookDetails, setBookDetails] = useState([])
+  const [netError, setNetError] = useState(false)
+  const [retry, setRetry] = useState(false)
 
   useEffect(() => {
     const url = `https://apis.ccbp.in/book-hub/books/${bookId}`
@@ -43,65 +47,92 @@ function BookDetails() {
 
           setBookDetails(bookData)
           setLoad(false)
+          setNetError(false)
+          setRetry(false)
         } else {
+          setLoad(false)
+          setNetError(true)
           console.error('Failed to fetch data')
         }
       } catch (error) {
         setLoad(false)
+        setNetError(true)
         console.error('An error occurred while fetching data', error)
       }
     }
 
     fetchData()
-  }, [bookId])
+    if (retry) {
+      setLoad(true)
+      fetchData()
+    }
+  }, [bookId, retry])
 
   return (
     <>
       <Navbar />
-      <div className="bookDetails-main-con">
-        <div className="bookDetails-mini-con">
-          {!load && (
-            <>
-              <div className="bookDetails-cover-con">
-                <img
-                  className="book-details-cover-pic"
-                  src={bookDetails.coverPic}
-                  alt={bookDetails.title}
-                />
-                <div>
-                  <h1 className="bookDetail-title">{bookDetails.title} </h1>
-                  <p className="bookDetails">{bookDetails.authorName}</p>
-                  <p className="bookDetails">
-                    Rating:{'  '}
-                    <>
-                      <BsFillStarFill className="star" />
-                      {bookDetails.rating}{' '}
-                    </>
-                  </p>
-                  <p className="bookDetails">
-                    Status:
-                    <span style={{color: '#0284C7'}}>
-                      {' '}
-                      {bookDetails.readStatus}
-                    </span>{' '}
-                  </p>
-                </div>
-              </div>
-              <hr className="hr-line" />
-              <div>
-                <div className="about-author-con">
-                  <h1 className="about-author-head">About Book</h1>
-                  <p className="about-author-dis">{bookDetails.aboutBook} </p>
-                </div>
-                <div className="about-author-con">
-                  <h1 className="about-author-head">About Author</h1>
-                  <p className="about-author-dis">{bookDetails.aboutAuthor} </p>
-                </div>
-              </div>
-            </>
-          )}
+      {netError && (
+        <NetworkError
+          onClickFun={() => {
+            setRetry(true)
+            setLoad(true)
+            setNetError(false)
+          }}
+        />
+      )}
+      {load && (
+        <div className="loader-container" testid="loader">
+          <Loader type="TailSpin" color="#0284C7" height={50} width={50} />
         </div>
-      </div>
+      )}
+      {!netError && (
+        <div className="bookDetails-main-con">
+          <div className="bookDetails-mini-con">
+            {!load && (
+              <>
+                <div className="bookDetails-cover-con">
+                  <img
+                    className="book-details-cover-pic"
+                    src={bookDetails.coverPic}
+                    alt={bookDetails.title}
+                  />
+                  <div>
+                    <h1 className="bookDetail-title">{bookDetails.title} </h1>
+                    <p className="bookDetails">{bookDetails.authorName}</p>
+                    <p className="bookDetails">
+                      Avg Rating:{'  '}
+                      <>
+                        <BsFillStarFill className="star" />
+                        {bookDetails.rating}{' '}
+                      </>
+                    </p>
+                    <p className="bookDetails">
+                      Status:
+                      <span style={{color: '#0284C7'}}>
+                        {' '}
+                        {bookDetails.readStatus}
+                      </span>{' '}
+                    </p>
+                  </div>
+                </div>
+                <hr className="hr-line" />
+                <div>
+                  <div className="about-author-con">
+                    <h1 className="about-author-head">About Book</h1>
+                    <p className="about-author-dis">{bookDetails.aboutBook} </p>
+                  </div>
+                  <div className="about-author-con">
+                    <h1 className="about-author-head">About Author</h1>
+                    <p className="about-author-dis">
+                      {bookDetails.aboutAuthor}{' '}
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
       <Footer />
     </>
   )

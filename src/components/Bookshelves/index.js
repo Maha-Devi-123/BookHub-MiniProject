@@ -1,4 +1,4 @@
-import {FaSearch} from 'react-icons/fa'
+import {BsSearch} from 'react-icons/bs'
 import {useState, useEffect} from 'react'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
@@ -41,45 +41,10 @@ function Bookshelves() {
   const [cat, setCat] = useState('All')
   const [networkErr, setNetworkErr] = useState(false)
   const [retry, setRetry] = useState(false)
-
-  function handleChanges(event) {
-    setSearchText(event.target.value)
-  }
-
-  function doSearch() {
-    const filteredBooks = currentBooksList.filter(each =>
-      each.title.toLowerCase().includes(searchText.toLowerCase()),
-    )
-
-    setBooksList(filteredBooks)
-  }
-
-  async function fetchWithTimeout(url, options, timeout) {
-    const controller = new AbortController()
-    const {signal} = controller
-
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => {
-        controller.abort()
-        reject(new Error('Request timeout'))
-      }, timeout),
-    )
-
-    try {
-      const response = await Promise.race([
-        fetch(url, {...options, signal}),
-        timeoutPromise,
-      ])
-
-      return response
-    } catch (error) {
-      console.error(error.message)
-      throw error
-    }
-  }
+  const [searchClick, setClick] = useState(false)
 
   useEffect(() => {
-    const url = `https://apis.ccbp.in/book-hub/books?shelf=${category}`
+    const url = `https://apis.ccbp.in/book-hub/books?shelf=${category}&search=${searchText}`
     const jwtToken = Cookies.get('jwt_token')
     const headers = {
       Authorization: `Bearer ${jwtToken}`,
@@ -90,7 +55,7 @@ function Bookshelves() {
     }
     async function fetchData() {
       try {
-        const response = await fetchWithTimeout(url, options, 30000)
+        const response = await fetch(url, options)
         if (response.ok) {
           const data = await response.json()
           const booksList = data.books
@@ -107,6 +72,10 @@ function Bookshelves() {
           setLoad(false)
           setNetworkErr(false)
           setRetry(false)
+        } else {
+          setLoad(false)
+          setNetworkErr(true)
+          setRetry(false)
         }
       } catch (error) {
         setLoad(false)
@@ -115,11 +84,11 @@ function Bookshelves() {
       }
     }
     fetchData()
-    if (retry || searchText === '') {
+    if (retry) {
       fetchData()
       setLoad(true)
     }
-  }, [category, searchText, retry])
+  }, [category, searchText, searchClick, retry])
 
   return (
     <>
@@ -132,26 +101,29 @@ function Bookshelves() {
               className="search-bar"
               type="search"
               value={searchText}
-              onChange={handleChanges}
+              onChange={event => setSearchText(event.target.value)}
             />
             <button
               type="button"
-              onClick={doSearch}
+              testid="searchButton"
               className="search-icon-con"
+              onClick={() => setClick(true)}
             >
-              <FaSearch className="search-icon" />
+              <BsSearch />
             </button>
           </div>
           <div className="bookshelves-options">
             <h1 className="bookshelves-heading">Bookshelves</h1>
-            <ul className="unorder-con">
+            <div className="unorder-con">
               {bookshelvesList.map(each => (
-                <li
+                <button
+                  type="button"
                   onClick={() => {
                     setCat(each.label)
                     setCategory(each.value)
                     setSearchText('')
                     setLoad(true)
+                    setClick(false)
                   }}
                   key={each.id}
                   className={
@@ -161,27 +133,28 @@ function Bookshelves() {
                   }
                 >
                   {each.label}
-                </li>
+                </button>
               ))}
-            </ul>
+            </div>
           </div>
           <div className="search-books-items-con">
             <div className="head-search-con">
               <h1 className="all-books-head">{cat} Books</h1>
               <div className="search-con">
                 <input
+                  type="search"
                   placeholder="Search"
                   className="search-bar"
-                  type="search"
                   value={searchText}
-                  onChange={handleChanges}
+                  onChange={event => setSearchText(event.target.value)}
                 />
                 <button
                   type="button"
-                  onClick={doSearch}
                   className="search-icon-con"
+                  testid="searchButton"
+                  onClick={() => setClick(true)}
                 >
-                  <FaSearch className="search-icon" />
+                  <BsSearch />
                 </button>
               </div>
             </div>

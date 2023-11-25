@@ -15,12 +15,15 @@ body {
   padding: 0px;
   background-color: #f5f7fa;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   width: 100vw;
 }
 a {
   cursor: pointer;
 }
+
 button {
   cursor: pointer;
 }

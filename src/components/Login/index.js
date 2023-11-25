@@ -7,7 +7,7 @@ const logo = () => (
   <div className="logo-con">
     <img
       src="https://i.ibb.co/hmXZxZv/Group-7730.jpg"
-      alt="Group-7730"
+      alt="login website logo"
       border="0"
       className="b-icon"
     />
@@ -74,7 +74,13 @@ class Login extends Component {
     const {showSubmitError, errorMsg, username, password} = this.state
     return (
       <div className="main-con">
-        <div className="image-con"> </div>
+        <div className="image-con">
+          <img
+            src="https://i.ibb.co/rwftdkR/Rectangle-1467.png"
+            alt="website login"
+            className="coffee-img"
+          />
+        </div>
         <div className="login-con">
           <form className="login-form" onSubmit={this.submitForm}>
             {logo()}

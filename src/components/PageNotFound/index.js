@@ -7,7 +7,7 @@ function PageNotFound() {
       <img
         src="https://i.ibb.co/z834VMh/Group-7484.jpg"
         className="not-found-img"
-        alt="page not found"
+        alt="not found"
       />
       <h1 className="page-not-found-head">Page Not Found</h1>
       <p className="page-not-found-dis">

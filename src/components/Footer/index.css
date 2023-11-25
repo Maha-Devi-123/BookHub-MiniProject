@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: auto;
   height: 150px;
 }
 .icons-con {
